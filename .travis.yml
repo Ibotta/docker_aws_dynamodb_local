@@ -1,0 +1,18 @@
+sudo: required
+dist: trusty
+group: edge
+services:
+  - docker
+before_script:
+  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+script:
+  - docker build -t aws-dynamodb-local .
+before_deploy:
+  - docker images
+  - docker tag aws-dynamodb-local ibotta/aws-dynamodb-local
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: docker push ibotta/aws-dynamodb-local
+    on:
+      branch: ibotta

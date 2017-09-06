@@ -1,7 +1,7 @@
 #
 # Dockerfile for DynamoDB Local
 #
-# https://aws.amazon.com/blogs/aws/dynamodb-local-for-desktop-development/
+# https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html
 #
 FROM openjdk:8-jre-slim
 # forked from MAINTAINER Dean Giberson <dean@deangiberson.com>, and edited
@@ -18,8 +18,10 @@ ADD https://s3-us-west-2.amazonaws.com/dynamodb-local/dynamodb_local_latest.tar.
 RUN tar xfz /tmp/dynamodb_local_latest.tar.gz && rm -f /tmp/dynamodb_local_latest.tar.gz
 
 # Default command for image
-ENTRYPOINT ["/usr/bin/java", "-Djava.library.path=.", "-jar", "DynamoDBLocal.jar", "-dbPath", "/var/dynamodb_local", "-sharedDb", "-optimizeDbBeforeStartup"]
-CMD ["-port", "8000"]
+ENTRYPOINT ["/usr/bin/java", "-Djava.library.path=.", "-jar", "DynamoDBLocal.jar", "-port", "8000"]
+
+# Make it easy to switch to -inMemory
+CMD ["-dbPath", "/var/dynamodb_local", "-sharedDb", "-optimizeDbBeforeStartup"]
 
 # Add VOLUMEs to allow backup of config, logs and databases
 VOLUME ["/var/dynamodb_local", "/var/dynamodb_wd"]
