@@ -1,10 +1,17 @@
-Docker container for AWS DynamoDB Local
+# Docker container for AWS DynamoDB Local
 
 AWS DynamoDB Local will let you test against DynamoDB without needing
 a full network. For details see https://aws.amazon.com/blogs/aws/dynamodb-local-for-desktop-development/
 
-To use link to your application:
+https://hub.docker.com/r/ibotta/aws-dynamodb-local/
 
-    sudo docker run -d --name dynamodb deangiberson/aws-dynamodb-local
+## Usage
 
-    sudo docker run -d -P --name web --link dynamodb:dynamodb training/webapp python app.py
+```sh
+docker run -p 8000:8000 ibotta/aws-dynamodb-local
+```
+
+## Notes
+
+* Exposes the data file as a separate volume
+* Uses the `-sharedDb` flag so different access IDs get the same database
