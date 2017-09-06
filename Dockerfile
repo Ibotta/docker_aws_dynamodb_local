@@ -3,8 +3,9 @@
 #
 # https://aws.amazon.com/blogs/aws/dynamodb-local-for-desktop-development/
 #
-FROM openjdk:7-jre
-# from MAINTAINER Dean Giberson <dean@deangiberson.com>, but edited
+FROM openjdk:8-jre-slim
+# forked from MAINTAINER Dean Giberson <dean@deangiberson.com>, and edited
+MAINTAINER Ibotta <jobs@ibotta.com>
 
 # Create working space
 WORKDIR /var/dynamodb_wd
@@ -13,9 +14,8 @@ WORKDIR /var/dynamodb_wd
 EXPOSE 8000
 
 # Get the package from Amazon
-RUN wget -O /tmp/dynamodb_local_latest https://s3-us-west-2.amazonaws.com/dynamodb-local/dynamodb_local_latest.tar.gz && \
-    tar xfz /tmp/dynamodb_local_latest && \
-    rm -f /tmp/dynamodb_local_latest
+ADD https://s3-us-west-2.amazonaws.com/dynamodb-local/dynamodb_local_latest.tar.gz /tmp/dynamodb_local_latest.tar.gz
+RUN tar xfz /tmp/dynamodb_local_latest.tar.gz && rm -f /tmp/dynamodb_local_latest.tar.gz
 
 # Default command for image
 ENTRYPOINT ["/usr/bin/java", "-Djava.library.path=.", "-jar", "DynamoDBLocal.jar", "-dbPath", "/var/dynamodb_local", "-sharedDb", "-optimizeDbBeforeStartup"]
